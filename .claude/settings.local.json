@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip show:*)",
+      "Bash(pip install:*)",
+      "Bash(python -c \"from mcp import ClientSession, StdioServerParameters; from mcp.client.stdio import stdio_client; print\\(''MCP SDK OK''\\)\")",
+      "Bash(python -m agent-py)",
+      "Bash(python -c \":*)"
+    ]
+  }
+}

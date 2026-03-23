@@ -1,0 +1,67 @@
+# =============================================================
+# ADO Report Agent Configuration
+# =============================================================
+
+# --- Azure DevOps Connection ---
+ado:
+  organization: "https://dev.azure.com/wearegap"
+  project: "{ADD YOUR PROJECT HERE}
+  pat_env_var: "{ADD YOUR PAT HERE}"            # Name of env var holding the PAT
+
+# --- Work Item Query ---
+query:
+  # WIQL query to retrieve top-level work items (User Stories, Features, etc.)
+  wiql: |
+    SELECT [System.Id], [System.Title], [System.State], [System.Tags]
+    FROM WorkItems
+    WHERE [System.TeamProject] = @project
+      AND [System.WorkItemType] = 'Product Backlog Item'
+      AND [System.State] <> 'Removed'
+      AND (
+        [System.Tags] CONTAINS 'Checkpoint1'
+        OR [System.Tags] CONTAINS 'Checkpoint2'
+        OR [System.Tags] CONTAINS 'Checkpoint3'
+        OR [System.Tags] CONTAINS 'Checkpoint4'
+      )
+    ORDER BY [System.Id] ASC
+
+# --- Phase Tags (used for grouping) ---
+# Only work items tagged with these values are included in the report.
+# The order here determines the display order in the report.
+phases:
+  - tag: "Checkpoint1"
+    display_name: "Checkpoint1"
+    color: "#4A90D9"
+  - tag: "Checkpoint2"
+    display_name: "Checkpoint2"
+    color: "#7B68EE"
+  - tag: "Checkpoint3"
+    display_name: "Checkpoint3"
+    color: "#50C878"
+  - tag: "Checkpoint4"
+    display_name: "Checkpoint4"
+    color: "#FFA500"
+
+# --- Report Output ---
+report:
+  output_dir: "./output"
+  filename: "project-report.html"
+  title: "Project Progress Report"
+  generated_by: "ADO Report Agent"
+
+# --- Task State Mapping ---
+# Maps ADO task states to completed/pending for progress calculation.
+task_states:
+  completed:
+    - "Closed"
+    - "Done"
+    - "Resolved"
+  in_progress:
+    - "Active"
+    - "In Progress"
+    - "Committed"
+    - "Approved"
+  pending:
+    - "New"
+    - "To Do"
+    - "Proposed"
