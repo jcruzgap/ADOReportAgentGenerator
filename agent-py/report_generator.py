@@ -43,7 +43,11 @@ project report data. Read it and use it to generate the report.
 
 4. **Work Item Detail** (inside each phase): For each work item show:
    - Work item ID and title
-   - Individual progress bar (completed tasks / total tasks)
+   - **Completion percentage badge** (e.g. "75%") prominently next to the title,
+     derived from `progress_percent` in the data (completed tasks / total tasks × 100).
+     Color-code it: green >= 80%, orange 40-79%, red < 40%. Show "N/A" when total_tasks = 0.
+   - Individual progress bar (completed tasks / total tasks) with the exact percentage label
+   - Task counts inline: e.g. "5 / 8 tasks completed"
    - Task breakdown table: Task ID, Title, State (with color-coded badges), Assigned To
    - Visual indicator: green = completed, blue = in progress, gray = pending
 
