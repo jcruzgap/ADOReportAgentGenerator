@@ -15,6 +15,7 @@ def invoke_claude_code(
     working_dir: str,
     max_turns: int = 10,
 ) -> str:
+    # Encode prompt explicitly to UTF-8 bytes to avoid Windows charmap issues
     result = subprocess.run(
         [
             _claude_cmd(),
@@ -22,19 +23,22 @@ def invoke_claude_code(
             "--dangerously-skip-permissions",
             "--max-turns", str(max_turns),
         ],
-        input=prompt,
+        input=prompt.encode("utf-8"),
         cwd=working_dir,
         capture_output=True,
-        text=True,
-        timeout=900,  # 15 min timeout
+        timeout=1800,  # 30 min timeout
     )
 
-    if result.stderr:
-        print(f"[claude-code stderr] {result.stderr[:500]}")
+    stdout = result.stdout.decode("utf-8", errors="replace")
+    stderr = result.stderr.decode("utf-8", errors="replace")
+
+    if stderr:
+        print(f"[claude-code stderr] {stderr[:1000]}")
 
     if result.returncode != 0:
+        detail = (stderr or stdout or "(no output)")[:1000]
         raise RuntimeError(
-            f"Claude Code exited with code {result.returncode}: {result.stderr[:500]}"
+            f"Claude Code exited with code {result.returncode}: {detail}"
         )
 
-    return result.stdout
+    return stdout

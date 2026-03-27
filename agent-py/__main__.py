@@ -1,5 +1,11 @@
 import sys
 import asyncio
+
+# Force UTF-8 for stdout/stderr on Windows to avoid charmap encoding errors
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 from .config_loader import load_config
 from .data_fetcher import fetch_all_data
 from .data_transformer import transform_data

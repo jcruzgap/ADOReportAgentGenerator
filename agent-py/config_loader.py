@@ -9,6 +9,8 @@ class PhaseConfig:
     tag: str
     display_name: str
     color: str
+    start_date: Optional[str] = None  # ISO date string, e.g. "2026-01-01"
+    end_date: Optional[str] = None    # ISO date string, e.g. "2026-04-30"
 
 
 @dataclass
@@ -69,6 +71,8 @@ def load_config(config_path: Optional[str] = None) -> ReportConfig:
                 tag=p["tag"],
                 display_name=p["display_name"],
                 color=p["color"],
+                start_date=p.get("start_date"),
+                end_date=p.get("end_date"),
             )
             for p in phases_raw
         ],

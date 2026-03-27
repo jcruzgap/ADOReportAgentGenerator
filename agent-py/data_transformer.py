@@ -33,6 +33,8 @@ class PhaseReport:
     tag: str
     display_name: str
     color: str
+    start_date: Optional[str]  # ISO date string, e.g. "2026-01-01"
+    end_date: Optional[str]    # ISO date string, e.g. "2026-04-30"
     work_items: list[WorkItemReport]
     total_work_items: int
     completed_work_items: int
@@ -139,6 +141,8 @@ def transform_data(items: list[WorkItemData], config: ReportConfig) -> ProjectRe
             tag=phase.tag,
             display_name=phase.display_name,
             color=phase.color,
+            start_date=phase.start_date,
+            end_date=phase.end_date,
             work_items=wis,
             total_work_items=len(wis),
             completed_work_items=0,
